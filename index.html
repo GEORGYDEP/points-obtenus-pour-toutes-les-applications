@@ -336,7 +336,7 @@ body::after {
 .lb-list { display: flex; flex-direction: column; gap: 4px; }
 .lb-row {
   display: grid;
-  grid-template-columns: 50px 1fr 110px 100px 90px 70px;
+  grid-template-columns: 50px 1fr 100px 110px 60px 90px;
   align-items: center;
   padding: 14px 20px;
   background: var(--card);
@@ -595,7 +595,7 @@ body::after {
 
 .detail-level-row {
   display: grid;
-  grid-template-columns: 1fr 90px 80px 120px;
+  grid-template-columns: 1fr 80px 50px 70px 110px;
   align-items: center;
   padding: 10px 0;
   border-bottom: 1px solid var(--border);
@@ -636,10 +636,10 @@ body::after {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .podium { flex-direction: row; align-items: flex-end; gap: 8px; min-height: 200px; }
   .podium-bar { width: 80px; }
-  .lb-row { grid-template-columns: 40px 1fr 80px 70px; }
-  .lb-row .lb-levels, .lb-row .lb-classe { display: none; }
+  .lb-row { grid-template-columns: 40px 1fr 80px 50px 70px; }
+  .lb-row .lb-classe { display: none; }
   .detail-stats { grid-template-columns: repeat(2, 1fr); }
-  .detail-level-row { grid-template-columns: 1fr 70px 60px; }
+  .detail-level-row { grid-template-columns: 1fr 60px 40px 60px; }
   .detail-level-date { display: none; }
 }
 @media (max-width: 600px) {
@@ -686,7 +686,7 @@ body::after {
     <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-val" id="statStudents">—</div><div class="stat-label">Élèves actifs</div></div>
     <div class="stat-card"><div class="stat-icon">📱</div><div class="stat-val" id="statApps">—</div><div class="stat-label">Applications</div></div>
     <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-val" id="statLevels">—</div><div class="stat-label">Niveaux complétés</div></div>
-    <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-val" id="statAvgPts">—</div><div class="stat-label">Points moyens</div></div>
+    <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-val" id="statAvgPts">—</div><div class="stat-label">Réussite moyenne</div></div>
   </div>
 
   <!-- TABS -->
@@ -842,6 +842,7 @@ function buildStudentDirectory() {
       email: entry.email,
       classe: entry.classe || '',
       totalPoints: entry.totalPoints,
+      totalPointsMax: entry.totalPointsMax || 0,
       totalTemps: entry.totalTemps,
       appsCompletes: entry.appsCompletes || 0,
       niveauxTotal: entry.niveauxTotal || 0,
@@ -857,16 +858,19 @@ function updateStats() {
   const students = Object.keys(DATA.students).length;
   const apps = DATA.appsList.length;
   const levels = Object.values(DATA.students).reduce((s, st) => s + (st.niveauxTotal || 0), 0);
-  const avgPts = students > 0 ? Math.round(Object.values(DATA.students).reduce((s, st) => s + st.totalPoints, 0) / students) : 0;
+  const totalPts = Object.values(DATA.students).reduce((s, st) => s + st.totalPoints, 0);
+  const totalMax = Object.values(DATA.students).reduce((s, st) => s + (st.totalPointsMax || 0), 0);
+  const avgPct = totalMax > 0 ? Math.round(totalPts / totalMax * 100) : 0;
 
   animateCounter('statStudents', students);
   animateCounter('statApps', apps);
   animateCounter('statLevels', levels);
-  animateCounter('statAvgPts', avgPts);
+  animateCounter('statAvgPts', avgPct, '%');
 }
 
-function animateCounter(id, target) {
+function animateCounter(id, target, suffix) {
   const el = document.getElementById(id);
+  const sfx = suffix || '';
   const duration = 600;
   const start = parseInt(el.textContent) || 0;
   const startTime = performance.now();
@@ -874,7 +878,7 @@ function animateCounter(id, target) {
   function step(now) {
     const progress = Math.min((now - startTime) / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.round(start + (target - start) * eased);
+    el.textContent = Math.round(start + (target - start) * eased) + sfx;
     if (progress < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
@@ -963,7 +967,7 @@ function renderPodium(list) {
       return `<div class="podium-slot">
         <div class="podium-avatar">${initials}</div>
         <div class="podium-name">${name}</div>
-        <div class="podium-score">${entry.totalPoints} pts · ${formatTime(entry.totalTemps)}</div>
+        <div class="podium-score">${entry.totalPoints}/${entry.totalPointsMax || '?'} (${entry.pct || 0}%) · ${formatTime(entry.totalTemps)}</div>
         <div class="podium-bar">${medals[i]}</div>
       </div>`;
     }).join('')}
@@ -977,14 +981,15 @@ function renderLBRows(list) {
 
   let html = `<div class="lb-list">
     <div class="lb-row lb-row-head">
-      <div>Rang</div><div>Élève</div><div>Classe</div><div>Points</div><div>Temps</div><div>${isGlobal ? 'Apps' : 'Niv.'}</div>
+      <div>Rang</div><div>Élève</div><div>Classe</div><div>Score</div><div>%</div><div>Temps</div>
     </div>`;
 
   list.forEach((entry, i) => {
     const rank = i + 1;
     const name = emailToName(entry.email);
     const initials = getInitials(entry.email);
-    const extra = isGlobal ? (entry.appsCompletes || '-') : (entry.niveauxCompletes || '-');
+    const pct = entry.pct || (entry.totalPointsMax > 0 ? Math.round(entry.totalPoints / entry.totalPointsMax * 100) : 0);
+    const pctColor = pct >= 80 ? 'var(--neon)' : pct >= 50 ? 'var(--gold)' : 'var(--pink)';
 
     html += `<div class="lb-row" onclick="openStudentDetail('${entry.email}')" style="cursor:pointer;">
       <div class="lb-rank ${rank <= 4 ? 'top4' : ''}">${rank <= 3 ? ['🥇','🥈','🥉'][rank-1] : '#' + rank}</div>
@@ -993,9 +998,9 @@ function renderLBRows(list) {
         <div><div class="lb-user-name">${name}</div><div class="lb-user-email">${entry.email}</div></div>
       </div>
       <div class="lb-classe">${entry.classe || '—'}</div>
-      <div class="lb-pts">${entry.totalPoints}</div>
+      <div class="lb-pts">${entry.totalPoints}<small style="color:var(--text3);font-size:0.72rem;">/${entry.totalPointsMax || '?'}</small></div>
+      <div style="color:${pctColor};font-weight:700;font-family:'JetBrains Mono',monospace;font-size:0.88rem;">${pct}%</div>
       <div class="lb-time">${formatTime(entry.totalTemps)}</div>
-      <div class="lb-levels">${extra}</div>
     </div>`;
   });
 
@@ -1046,9 +1051,9 @@ function renderStudents() {
         </div>
       </div>
       <div class="student-card-stats">
-        <div class="scs-item"><div class="scs-val">${st.totalPoints}</div><div class="scs-label">Points</div></div>
+        <div class="scs-item"><div class="scs-val">${st.totalPoints}<small style="color:var(--text3);font-size:0.6rem;">/${st.totalPointsMax || '?'}</small></div><div class="scs-label">Score</div></div>
+        <div class="scs-item"><div class="scs-val" style="color:${(st.totalPointsMax > 0 ? Math.round(st.totalPoints/st.totalPointsMax*100) : 0) >= 80 ? 'var(--neon)' : (st.totalPointsMax > 0 ? Math.round(st.totalPoints/st.totalPointsMax*100) : 0) >= 50 ? 'var(--gold)' : 'var(--pink)'}">${st.totalPointsMax > 0 ? Math.round(st.totalPoints/st.totalPointsMax*100) : 0}%</div><div class="scs-label">Réussite</div></div>
         <div class="scs-item"><div class="scs-val">${formatTime(st.totalTemps)}</div><div class="scs-label">Temps</div></div>
-        <div class="scs-item"><div class="scs-val">${st.appsCompletes}</div><div class="scs-label">Apps</div></div>
       </div>
     </div>`;
   }).join('');
@@ -1078,6 +1083,8 @@ function openStudentDetail(email) {
     const apps = data.apps || [];
     const classe = data.classe || '';
     const totalPoints = data.totalPoints || 0;
+    const totalPointsMax = data.totalPointsMax || 0;
+    const totalPct = totalPointsMax > 0 ? Math.round(totalPoints / totalPointsMax * 100) : 0;
     const totalTemps = data.totalTemps || 0;
     const totalLevels = apps.reduce((s, a) => s + a.niveaux.length, 0);
 
@@ -1086,28 +1093,38 @@ function openStudentDetail(email) {
 
     let appsHTML = apps.map(app => {
       const appPts = app.totalPoints;
-      const appTime = Math.round(app.totalTemps);
+      const appMax = app.totalPointsMax || 0;
+      const appPct = appMax > 0 ? Math.round(appPts / appMax * 100) : 0;
+      const appPctColor = appPct >= 80 ? 'var(--neon)' : appPct >= 50 ? 'var(--gold)' : 'var(--pink)';
       return `<div class="detail-app" onclick="this.classList.toggle('open')">
         <div class="detail-app-header">
           <div class="detail-app-name">
             📱 ${app.app}
-            <span class="detail-app-badge">${appPts} pts</span>
+            <span class="detail-app-badge">${appPts}/${appMax}</span>
+            <span style="color:${appPctColor};font-weight:700;font-size:0.85rem;margin-left:6px;">${appPct}%</span>
           </div>
           <div class="detail-app-arrow">▼</div>
         </div>
         <div class="detail-app-body">
           <div class="detail-level-row" style="font-weight:600;color:var(--text3);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;">
-            <div>Niveau</div><div>Points</div><div>Temps</div><div>Date</div>
+            <div>Niveau</div><div>Score</div><div>%</div><div>Temps</div><div>Date</div>
           </div>
-          ${app.niveaux.map(n => `<div class="detail-level-row">
+          ${app.niveaux.map(n => {
+            const nPct = n.pointsMax > 0 ? Math.round(n.points / n.pointsMax * 100) : 0;
+            const nColor = nPct >= 80 ? 'var(--neon)' : nPct >= 50 ? 'var(--gold)' : 'var(--pink)';
+            return `<div class="detail-level-row">
             <div class="detail-level-name">${n.niveau}</div>
-            <div class="detail-level-pts">${n.points} pts</div>
+            <div class="detail-level-pts">${n.points}/${n.pointsMax || '?'}</div>
+            <div style="color:${nColor};font-weight:600;font-family:'JetBrains Mono',monospace;font-size:0.85rem;">${nPct}%</div>
             <div class="detail-level-time">${formatTime(n.temps)}</div>
             <div class="detail-level-date">${formatDate(n.date)}</div>
-          </div>`).join('')}
+          </div>`;
+          }).join('')}
         </div>
       </div>`;
     }).join('');
+
+    const pctColor = totalPct >= 80 ? 'var(--neon)' : totalPct >= 50 ? 'var(--gold)' : 'var(--pink)';
 
     overlay.innerHTML = `<div class="detail-box">
       <button class="detail-close" onclick="closeDetail()">✕</button>
@@ -1120,8 +1137,8 @@ function openStudentDetail(email) {
       </div>
       <div class="detail-stats">
         <div class="ds-item"><div class="ds-val">${globalRank > 0 ? '#' + globalRank : '—'}</div><div class="ds-label">Rang global</div></div>
-        <div class="ds-item"><div class="ds-val">${totalPoints}</div><div class="ds-label">Points</div></div>
-        <div class="ds-item"><div class="ds-val">${apps.length}</div><div class="ds-label">Applications</div></div>
+        <div class="ds-item"><div class="ds-val">${totalPoints}<small style="font-size:0.7rem;color:var(--text3);">/${totalPointsMax}</small></div><div class="ds-label">Score</div></div>
+        <div class="ds-item"><div class="ds-val" style="color:${pctColor}">${totalPct}%</div><div class="ds-label">Réussite</div></div>
         <div class="ds-item"><div class="ds-val">${totalLevels}</div><div class="ds-label">Niveaux</div></div>
       </div>
       <div style="margin-bottom:12px;font-weight:600;font-size:0.85rem;color:var(--text2);display:flex;align-items:center;gap:8px;">
