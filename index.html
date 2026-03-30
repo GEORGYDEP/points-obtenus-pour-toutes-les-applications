@@ -6,28 +6,31 @@
 <title>Dashboard Professeur — Suivi Élèves | ISTLM</title>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#06080f;--bg2:#0c1018;--bg3:#111827;--card:#131a2b;--card2:#182035;--neon:#00ffc8;--neon-dim:rgba(0,255,200,0.12);--neon-glow:rgba(0,255,200,0.25);--neon2:#7c5cff;--neon2-dim:rgba(124,92,255,0.12);--gold:#ffd700;--gold-glow:rgba(255,215,0,0.25);--gold-dim:rgba(255,215,0,0.08);--silver:#c0d0e0;--bronze:#cd7f32;--cyan:#00d4ff;--pink:#ff3c8e;--orange:#ff8a3d;--red:#ff4060;--text:#e4e8f1;--text2:#8892a8;--text3:#4a5568;--border:rgba(255,255,255,0.05);--border-neon:rgba(0,255,200,0.15);--radius:16px;--radius-sm:10px;--radius-xs:6px}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Chakra Petch',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+:root{--bg:#06080f;--bg2:#0c1018;--bg3:#111827;--card:#131a2b;--card2:#182035;--neon:#00ffc8;--neon-dim:rgba(0,255,200,0.12);--neon-glow:rgba(0,255,200,0.25);--neon2:#7c5cff;--neon2-dim:rgba(124,92,255,0.12);--gold:#ffd700;--gold-glow:rgba(255,215,0,0.25);--silver:#c0d0e0;--bronze:#cd7f32;--cyan:#00d4ff;--pink:#ff3c8e;--orange:#ff8a3d;--red:#ff4060;--text:#e4e8f1;--text2:#8892a8;--text3:#4a5568;--border:rgba(255,255,255,0.05);--border-neon:rgba(0,255,200,0.15);--radius:16px;--radius-sm:10px;--radius-xs:6px}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Chakra Petch',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 10% 10%,rgba(0,255,200,0.04) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 90% 90%,rgba(124,92,255,0.04) 0%,transparent 60%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,200,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,200,0.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;animation:gridScroll 20s linear infinite}
 @keyframes gridScroll{0%{transform:translate(0,0)}100%{transform:translate(60px,60px)}}
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--neon)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px}
 .header{position:sticky;top:0;z-index:100;background:rgba(6,8,15,0.88);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--border-neon);padding:0 32px}
 .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:72px}
-.logo{display:flex;align-items:center;gap:14px}
-.logo-hex{width:42px;height:42px;background:linear-gradient(135deg,var(--neon),var(--neon2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-size:1.2rem;animation:logoPulse 3s ease-in-out infinite}
+.logo{display:flex;align-items:center;gap:14px}.logo-hex{width:42px;height:42px;background:linear-gradient(135deg,var(--neon),var(--neon2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-size:1.2rem;animation:logoPulse 3s ease-in-out infinite}
 @keyframes logoPulse{0%,100%{filter:drop-shadow(0 0 8px rgba(0,255,200,0.4))}50%{filter:drop-shadow(0 0 20px rgba(0,255,200,0.7))}}
 .logo-text{font-family:'Orbitron',sans-serif;font-weight:700;font-size:1.05rem;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(90deg,var(--neon),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .logo-sub{font-size:0.65rem;color:var(--text3);letter-spacing:3px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
 .header-right{display:flex;align-items:center;gap:16px}
 .header-time{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--text3)}
+.refresh-area{display:flex;align-items:center;gap:10px}
 .refresh-btn{background:var(--neon-dim);border:1px solid var(--border-neon);color:var(--neon);padding:8px 16px;border-radius:var(--radius-sm);cursor:pointer;font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:0.82rem;display:flex;align-items:center;gap:6px;transition:all 0.3s}
 .refresh-btn:hover{background:var(--neon);color:var(--bg);box-shadow:0 0 20px var(--neon-glow)}
-.refresh-btn.spinning svg{animation:spin 0.6s linear}
+.auto-ring{width:28px;height:28px;position:relative}.auto-ring svg{width:28px;height:28px;transform:rotate(-90deg)}.auto-ring circle{fill:none;stroke-width:3;stroke-linecap:round}.auto-ring .bg{stroke:var(--bg3)}.auto-ring .fg{stroke:var(--neon);transition:stroke-dashoffset 1s linear}
+.auto-label{font-size:0.7rem;color:var(--text3);font-family:'JetBrains Mono',monospace}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--neon);animation:blink 1.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 @keyframes spin{to{transform:rotate(360deg)}}
 .container{max-width:1400px;margin:0 auto;padding:28px 32px 80px;position:relative;z-index:1}
-.legend-banner{background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,215,0,0.02));border:1px solid rgba(255,215,0,0.25);border-radius:var(--radius);padding:20px 28px;margin-bottom:24px;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden}
+.legend-banner{background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,215,0,0.02));border:1px solid rgba(255,215,0,0.25);border-radius:var(--radius);padding:20px 28px;margin-bottom:24px;display:none;align-items:center;gap:20px;position:relative;overflow:hidden}
+.legend-banner.show{display:flex}
 .legend-banner::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,215,0,0.03),transparent);animation:legendShimmer 3s ease-in-out infinite}
 @keyframes legendShimmer{0%,100%{opacity:0.3}50%{opacity:1}}
 .legend-trophy{font-size:2.5rem;filter:drop-shadow(0 0 12px rgba(255,215,0,0.4));animation:trophyBounce 2s ease-in-out infinite;position:relative;z-index:1}
@@ -39,281 +42,263 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .legend-stats{display:flex;gap:20px;position:relative;z-index:1}
 .legend-stat-val{font-family:'Orbitron',sans-serif;font-weight:800;font-size:1.3rem;color:var(--gold)}
 .legend-stat-label{font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
-.legend-hidden{display:none}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;position:relative;overflow:hidden;transition:all 0.4s}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
 .stat-card:nth-child(1)::before{background:linear-gradient(90deg,var(--neon),transparent)}.stat-card:nth-child(2)::before{background:linear-gradient(90deg,var(--neon2),transparent)}.stat-card:nth-child(3)::before{background:linear-gradient(90deg,var(--cyan),transparent)}.stat-card:nth-child(4)::before{background:linear-gradient(90deg,var(--gold),transparent)}
-.stat-card:hover{transform:translateY(-3px);border-color:var(--border-neon)}
-.stat-icon{font-size:1.5rem;margin-bottom:10px}
+.stat-card:hover{transform:translateY(-3px);border-color:var(--border-neon)}.stat-icon{font-size:1.5rem;margin-bottom:10px}
 .stat-val{font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:800;line-height:1}
 .stat-card:nth-child(1) .stat-val{color:var(--neon)}.stat-card:nth-child(2) .stat-val{color:var(--neon2)}.stat-card:nth-child(3) .stat-val{color:var(--cyan)}.stat-card:nth-child(4) .stat-val{color:var(--gold)}
 .stat-label{font-size:0.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:2px;margin-top:6px}
 .filters-row{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:flex-end}
 .filter-select{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:var(--radius-xs);font-family:'Chakra Petch',sans-serif;font-size:0.85rem;cursor:pointer;outline:none;min-width:180px}
-.filter-select:focus{border-color:var(--neon)}
-.filter-label{font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.filter-select:focus{border-color:var(--neon)}.filter-label{font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
 .lb-list{display:flex;flex-direction:column;gap:4px}
 .lb-row{display:grid;align-items:center;padding:14px 20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all 0.3s;cursor:pointer}
 .lb-row:hover{border-color:var(--border-neon);background:var(--card2)}
-.lb-row-head{background:none;border:none;padding:8px 20px;font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--text3);cursor:default}
-.lb-row-head:hover{background:none;border:none}
-.lb-row-global{grid-template-columns:50px 1fr 100px 160px 70px 120px 90px}
-.lb-row-exercise{grid-template-columns:50px 1fr 100px 100px 70px 90px}
-.lb-rank{font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.95rem}
-.lb-rank.top4{color:var(--neon);text-shadow:0 0 10px var(--neon-glow)}
+.lb-row-head{background:none;border:none;padding:8px 20px;font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--text3);cursor:default}.lb-row-head:hover{background:none;border:none}
+.g-grid{grid-template-columns:50px 1fr 100px 160px 70px 120px 90px}.e-grid{grid-template-columns:50px 1fr 100px 100px 70px 90px}
+.lb-rank{font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.95rem}.lb-rank.top4{color:var(--neon);text-shadow:0 0 10px var(--neon-glow)}
 .lb-rank-1{color:#ffd700!important;font-weight:800}.lb-rank-2{color:#c0c0c0!important;font-weight:700}.lb-rank-3{color:#cd7f32!important;font-weight:700}
-.lb-user{display:flex;align-items:center;gap:12px}
-.lb-user-avatar{width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;color:var(--text2);border:2px solid var(--border)}
-.lb-user-name{font-weight:600;font-size:0.9rem}
-.lb-user-email{font-size:0.72rem;color:var(--text3);font-family:'JetBrains Mono',monospace}
+.lb-user{display:flex;align-items:center;gap:12px}.lb-user-avatar{width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;color:var(--text2);border:2px solid var(--border)}
+.lb-user-name{font-weight:600;font-size:0.9rem}.lb-user-email{font-size:0.72rem;color:var(--text3);font-family:'JetBrains Mono',monospace}
 .lb-classe{font-size:0.8rem;color:var(--neon2);font-weight:500;background:var(--neon2-dim);padding:3px 8px;border-radius:6px;text-align:center;white-space:nowrap}
-.lb-pts{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--neon)}
-.lb-pct{font-family:'JetBrains Mono',monospace;font-weight:700}
-.lb-time{font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--text2)}
-.progress-cell{display:flex;align-items:center;gap:8px}
-.progress-mini{flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;min-width:80px}
-.progress-mini-fill{height:100%;border-radius:4px;transition:width 0.6s ease}
-.progress-mini-text{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text3);white-space:nowrap}
+.lb-pts{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--neon)}.lb-pct{font-family:'JetBrains Mono',monospace;font-weight:700}.lb-time{font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--text2)}
+.progress-cell{display:flex;align-items:center;gap:8px}.progress-mini{flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;min-width:80px}.progress-mini-fill{height:100%;border-radius:4px;transition:width 0.6s ease}.progress-mini-text{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text3);white-space:nowrap}
 .detail-overlay{position:fixed;inset:0;z-index:9999;background:rgba(6,8,15,0.92);backdrop-filter:blur(16px);display:flex;align-items:flex-start;justify-content:center;padding:40px 24px;overflow-y:auto;animation:fadeIn 0.3s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .detail-box{background:var(--card);border:1px solid var(--border-neon);border-radius:var(--radius);width:100%;max-width:800px;padding:32px;position:relative;box-shadow:0 0 60px rgba(0,255,200,0.06);animation:slideUp 0.4s cubic-bezier(0.4,0,0.2,1)}
 @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.detail-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:var(--bg3);border:1px solid var(--border);border-radius:50%;cursor:pointer;color:var(--text2);font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
-.detail-close:hover{background:var(--red);color:white;border-color:var(--red)}
-.detail-header{display:flex;align-items:center;gap:18px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)}
-.detail-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--neon),var(--neon2));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:800;font-size:1.4rem;color:var(--bg);box-shadow:0 0 24px var(--neon-glow)}
-.detail-info h2{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700}
-.detail-info .email{font-size:0.78rem;color:var(--text3);font-family:'JetBrains Mono',monospace}
-.detail-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
-.ds-item{background:var(--bg2);border-radius:var(--radius-sm);padding:16px;text-align:center;border:1px solid var(--border)}
-.ds-val{font-family:'Orbitron',sans-serif;font-weight:800;font-size:1.6rem}
-.ds-label{font-size:0.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
+.detail-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:var(--bg3);border:1px solid var(--border);border-radius:50%;cursor:pointer;color:var(--text2);font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s}.detail-close:hover{background:var(--red);color:white;border-color:var(--red)}
+.detail-header{display:flex;align-items:center;gap:18px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)}.detail-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--neon),var(--neon2));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:800;font-size:1.4rem;color:var(--bg);box-shadow:0 0 24px var(--neon-glow)}
+.detail-info h2{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700}.detail-info .email{font-size:0.78rem;color:var(--text3);font-family:'JetBrains Mono',monospace}
+.detail-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}.ds-item{background:var(--bg2);border-radius:var(--radius-sm);padding:16px;text-align:center;border:1px solid var(--border)}.ds-val{font-family:'Orbitron',sans-serif;font-weight:800;font-size:1.6rem}.ds-label{font-size:0.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
 .ds-item:nth-child(1) .ds-val{color:var(--neon)}.ds-item:nth-child(2) .ds-val{color:var(--cyan)}.ds-item:nth-child(3) .ds-val{color:var(--neon2)}.ds-item:nth-child(4) .ds-val{color:var(--gold)}
-.detail-app{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:12px;overflow:hidden}
-.detail-app-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.2s}
-.detail-app-header:hover{background:var(--bg3)}
-.detail-app-name{font-weight:700;font-size:1rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.detail-app-badge{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--neon);background:var(--neon-dim);padding:3px 10px;border-radius:20px}
-.detail-app-arrow{transition:transform 0.3s;color:var(--text3)}
-.detail-app.open .detail-app-arrow{transform:rotate(180deg)}
-.detail-app-body{display:none;padding:0 20px 16px}
-.detail-app.open .detail-app-body{display:block}
-.detail-level-row{display:grid;grid-template-columns:1fr 80px 50px 70px 110px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.85rem}
-.detail-level-row:last-child{border-bottom:none}
-.detail-level-name{color:var(--text2)}.detail-level-pts{font-family:'JetBrains Mono',monospace;color:var(--neon);font-weight:600}.detail-level-time{font-family:'JetBrains Mono',monospace;color:var(--text3)}.detail-level-date{font-family:'JetBrains Mono',monospace;color:var(--text3);font-size:0.75rem}
-.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:16px}
-.loader-ring{width:48px;height:48px;border:3px solid var(--bg3);border-top-color:var(--neon);border-radius:50%;animation:spin 0.8s linear infinite}
-.loading-text{font-size:0.9rem;color:var(--text3);font-family:'JetBrains Mono',monospace}
-.empty-state{text-align:center;padding:80px 20px;color:var(--text3)}
-.empty-state .empty-icon{font-size:3rem;margin-bottom:16px}
-.empty-state .empty-msg{font-size:1rem;margin-bottom:6px;color:var(--text2)}
-@media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}.container{padding:16px}.header{padding:0 16px}.lb-row-global{grid-template-columns:40px 1fr 130px 60px 70px}.lb-row-global .lb-classe,.lb-row-global .lb-time{display:none}.lb-row-exercise{grid-template-columns:40px 1fr 80px 50px 70px}.lb-row-exercise .lb-classe{display:none}.detail-stats{grid-template-columns:repeat(2,1fr)}.detail-level-row{grid-template-columns:1fr 60px 40px 60px}.detail-level-date{display:none}.legend-banner{flex-direction:column;text-align:center}.legend-stats{justify-content:center}}
+.detail-app{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:12px;overflow:hidden}.detail-app-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.2s}.detail-app-header:hover{background:var(--bg3)}
+.detail-app-name{font-weight:700;font-size:1rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.detail-app-badge{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--neon);background:var(--neon-dim);padding:3px 10px;border-radius:20px}
+.detail-app-arrow{transition:transform 0.3s;color:var(--text3)}.detail-app.open .detail-app-arrow{transform:rotate(180deg)}.detail-app-body{display:none;padding:0 20px 16px}.detail-app.open .detail-app-body{display:block}
+.dlr{display:grid;grid-template-columns:1fr 80px 50px 70px 110px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.85rem}.dlr:last-child{border-bottom:none}
+.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:16px}.loader-ring{width:48px;height:48px;border:3px solid var(--bg3);border-top-color:var(--neon);border-radius:50%;animation:spin 0.8s linear infinite}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text3)}.empty-state .empty-icon{font-size:3rem;margin-bottom:16px}.empty-state .empty-msg{font-size:1rem;color:var(--text2)}
+@media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}.container{padding:16px}.header{padding:0 16px}.g-grid{grid-template-columns:40px 1fr 130px 60px 70px}.g-grid .lb-classe,.g-grid .lb-time{display:none}.e-grid{grid-template-columns:40px 1fr 80px 50px 70px}.e-grid .lb-classe{display:none}.detail-stats{grid-template-columns:repeat(2,1fr)}.dlr{grid-template-columns:1fr 60px 40px 60px}.dlr>:last-child{display:none}.legend-banner{flex-direction:column;text-align:center}.legend-stats{justify-content:center}}
 @media(max-width:600px){.stats-grid{grid-template-columns:1fr 1fr;gap:10px}.filters-row{flex-direction:column}.filter-select{width:100%}}
 </style>
 </head>
 <body>
-<header class="header"><div class="header-inner"><div class="logo"><div class="logo-hex">📊</div><div><div class="logo-text">Teacher Hub</div><div class="logo-sub">Institut Saint-Luc Frameries</div></div></div><div class="header-right"><div class="header-time" id="headerTime"></div><button class="refresh-btn" onclick="refreshAll()" id="refreshBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Rafraîchir</button></div></div></header>
+<header class="header"><div class="header-inner"><div class="logo"><div class="logo-hex">📊</div><div><div class="logo-text">Teacher Hub</div><div class="logo-sub">Institut Saint-Luc Frameries</div></div></div><div class="header-right"><div class="header-time" id="headerTime"></div><div class="refresh-area"><div class="live-dot"></div><div class="auto-label" id="autoLabel">15s</div><div class="auto-ring" id="autoRing"><svg viewBox="0 0 32 32"><circle class="bg" cx="16" cy="16" r="14"/><circle class="fg" id="autoCircle" cx="16" cy="16" r="14" stroke-dasharray="88" stroke-dashoffset="0"/></svg></div><button class="refresh-btn" onclick="fetchData()">↻ Rafraîchir</button></div></div></div></header>
 <div class="container">
-  <div class="legend-banner legend-hidden" id="legendBanner"><div class="legend-trophy">🏆</div><div class="legend-info"><div class="legend-label">✦ Légende ✦</div><div class="legend-name" id="legendName">—</div><div class="legend-class" id="legendClass"></div></div><div class="legend-stats"><div><div class="legend-stat-val" id="legendPts">—</div><div class="legend-stat-label">Points</div></div><div><div class="legend-stat-val" id="legendPct">—</div><div class="legend-stat-label">Réussite</div></div></div></div>
-  <div class="stats-grid"><div class="stat-card"><div class="stat-icon">👥</div><div class="stat-val" id="statStudents">—</div><div class="stat-label">Élèves actifs</div></div><div class="stat-card"><div class="stat-icon">📱</div><div class="stat-val" id="statApps">—</div><div class="stat-label">Applications</div></div><div class="stat-card"><div class="stat-icon">✅</div><div class="stat-val" id="statLevels">—</div><div class="stat-label">Niveaux complétés</div></div><div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-val" id="statAvgPct">—</div><div class="stat-label">Réussite moyenne</div></div></div>
-  <div class="filters-row"><div><div class="filter-label">Classe</div><select class="filter-select" id="filterClasse" onchange="onFilterChange()"><option value="">🎓 Toutes les classes</option></select></div><div><div class="filter-label">Application</div><select class="filter-select" id="filterApp" onchange="onAppChange()"><option value="">🌍 Toutes les applications</option></select></div><div id="filterExWrap" style="display:none"><div class="filter-label">Exercice</div><select class="filter-select" id="filterEx" onchange="onFilterChange()"><option value="">📋 Tous les exercices</option></select></div></div>
-  <div id="mainContent"><div class="loading-state"><div class="loader-ring"></div><div class="loading-text">Chargement des données…</div></div></div>
+  <div class="legend-banner" id="legendBanner"><div class="legend-trophy">🏆</div><div class="legend-info"><div class="legend-label">✦ Légende ✦</div><div class="legend-name" id="legendName">—</div><div class="legend-class" id="legendClass"></div></div><div class="legend-stats"><div><div class="legend-stat-val" id="legendPts">—</div><div class="legend-stat-label">Points</div></div><div><div class="legend-stat-val" id="legendPct">—</div><div class="legend-stat-label">Réussite</div></div></div></div>
+  <div class="stats-grid"><div class="stat-card"><div class="stat-icon">👥</div><div class="stat-val" id="s1">—</div><div class="stat-label">Élèves actifs</div></div><div class="stat-card"><div class="stat-icon">📱</div><div class="stat-val" id="s2">—</div><div class="stat-label">Applications</div></div><div class="stat-card"><div class="stat-icon">✅</div><div class="stat-val" id="s3">—</div><div class="stat-label">Niveaux complétés</div></div><div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-val" id="s4">—</div><div class="stat-label">Réussite moyenne</div></div></div>
+  <div class="filters-row"><div><div class="filter-label">Classe</div><select class="filter-select" id="fC" onchange="render()"><option value="">🎓 Toutes les classes</option></select></div><div><div class="filter-label">Application</div><select class="filter-select" id="fA" onchange="onAppChange()"><option value="">🌍 Toutes les applications</option></select></div><div id="fEW" style="display:none"><div class="filter-label">Exercice</div><select class="filter-select" id="fE" onchange="render()"><option value="">📋 Tous les exercices</option></select></div></div>
+  <div id="mc"><div class="loading-state"><div class="loader-ring"></div></div></div>
 </div>
 <div class="detail-overlay" id="detailOverlay" style="display:none" onclick="if(event.target===this)closeDetail()"></div>
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbx9bRMVuHU2mgFLii1KcQXD3LdZahnDH1rf1cWv9RuDvQAt0l3VtLtxzmbH7MtpJWRjfA/exec";
-let DATA={globalLB:[],appsList:[],classesList:[],appDetails:{}};
+const URL="https://script.google.com/macros/s/AKfycbx9bRMVuHU2mgFLii1KcQXD3LdZahnDH1rf1cWv9RuDvQAt0l3VtLtxzmbH7MtpJWRjfA/exec";
+const REFRESH=15;
+let D={rows:[],apps:[],classes:[],exercisesPerApp:{}};
+let countdown=REFRESH,timer=null,firstLoad=true;
 
-document.addEventListener('DOMContentLoaded',()=>{updateClock();setInterval(updateClock,1000);refreshAll();});
+document.addEventListener('DOMContentLoaded',()=>{
+  updateClock();setInterval(updateClock,1000);
+  fetchData();
+  timer=setInterval(tick,1000);
+});
+
 function updateClock(){const n=new Date();document.getElementById('headerTime').textContent=n.toLocaleDateString('fr-BE',{weekday:'short',day:'numeric',month:'short'})+' — '+n.toLocaleTimeString('fr-BE',{hour:'2-digit',minute:'2-digit'});}
 
-function jsonpFetch(action,params,cb){
-  const name='cb_'+Math.random().toString(36).substr(2,9)+'_'+Date.now();
-  window[name]=function(d){delete window[name];const s=document.getElementById(name);if(s)s.remove();cb(d);};
-  let url=`${SCRIPT_URL}?action=${action}&callback=${name}`;
-  Object.keys(params).forEach(k=>{url+=`&${k}=${encodeURIComponent(params[k])}`;});
-  const s=document.createElement('script');s.id=name;s.src=url;
-  s.onerror=()=>{delete window[name];s.remove();cb(null);};
+function tick(){
+  countdown--;
+  if(countdown<=0){fetchData();countdown=REFRESH;}
+  document.getElementById('autoLabel').textContent=countdown+'s';
+  const circ=document.getElementById('autoCircle');
+  circ.style.strokeDashoffset=88*(1-countdown/REFRESH);
+}
+
+function jsonp(action,params,cb){
+  const n='cb_'+Math.random().toString(36).substr(2,8)+'_'+Date.now();
+  window[n]=function(d){delete window[n];const s=document.getElementById(n);if(s)s.remove();cb(d);};
+  let u=`${URL}?action=${action}&callback=${n}`;
+  Object.keys(params).forEach(k=>{u+=`&${k}=${encodeURIComponent(params[k])}`;});
+  const s=document.createElement('script');s.id=n;s.src=u;s.onerror=()=>{delete window[n];s.remove();cb(null);};
   document.body.appendChild(s);
 }
 
-function refreshAll(){
-  const btn=document.getElementById('refreshBtn');btn.classList.add('spinning');
-  document.getElementById('mainContent').innerHTML='<div class="loading-state"><div class="loader-ring"></div><div class="loading-text">Chargement…</div></div>';
-  let pending=3;
-  function done(){pending--;if(pending>0)return;populateFilters();updateStats();updateLegend();onAppChange();btn.classList.remove('spinning');}
-  jsonpFetch('leaderboard_global',{},d=>{if(d&&d.status==='ok')DATA.globalLB=d.leaderboard||[];done();});
-  jsonpFetch('apps_list',{},d=>{if(d&&d.status==='ok')DATA.appsList=d.apps||[];done();});
-  jsonpFetch('classes_list',{},d=>{if(d&&d.status==='ok')DATA.classesList=d.classes||[];done();});
+function fetchData(){
+  countdown=REFRESH;
+  jsonp('dashboard',{},d=>{
+    if(!d||d.status!=='ok')return;
+    D.rows=d.rows||[];D.apps=d.apps||[];D.classes=d.classes||[];D.exercisesPerApp=d.exercisesPerApp||{};
+    if(firstLoad){populateFilters();firstLoad=false;}
+    updateStats();render();
+  });
 }
 
 function populateFilters(){
-  const cSel=document.getElementById('filterClasse'),cVal=cSel.value;
-  cSel.innerHTML='<option value="">🎓 Toutes les classes</option>';
-  DATA.classesList.forEach(c=>{cSel.innerHTML+=`<option value="${c}">${c}</option>`;});cSel.value=cVal;
-  const aSel=document.getElementById('filterApp'),aVal=aSel.value;
-  aSel.innerHTML='<option value="">🌍 Toutes les applications</option>';
-  DATA.appsList.forEach(a=>{aSel.innerHTML+=`<option value="${a}">📱 ${a}</option>`;});aSel.value=aVal;
+  const c=document.getElementById('fC'),cv=c.value;
+  c.innerHTML='<option value="">🎓 Toutes les classes</option>';
+  D.classes.forEach(x=>{c.innerHTML+=`<option value="${x}">${x}</option>`;});c.value=cv;
+  const a=document.getElementById('fA'),av=a.value;
+  a.innerHTML='<option value="">🌍 Toutes les applications</option>';
+  D.apps.forEach(x=>{a.innerHTML+=`<option value="${x}">📱 ${x}</option>`;});a.value=av;
 }
 
 function onAppChange(){
-  const app=document.getElementById('filterApp').value;
-  const exWrap=document.getElementById('filterExWrap');
-  const exSel=document.getElementById('filterEx');
-  if(!app){exWrap.style.display='none';exSel.innerHTML='<option value="">📋 Tous les exercices</option>';renderGlobalView();return;}
-  exWrap.style.display='';
-  document.getElementById('mainContent').innerHTML='<div class="loading-state"><div class="loader-ring"></div><div class="loading-text">Chargement…</div></div>';
-  const classe=document.getElementById('filterClasse').value;
-  jsonpFetch('app_details',{app:app,classe:classe},d=>{
-    if(d&&d.status==='ok'){DATA.appDetails[app+'_'+classe]=d;exSel.innerHTML='<option value="">📋 Tous les exercices</option>';(d.exercises||[]).forEach(ex=>{exSel.innerHTML+=`<option value="${ex}">${ex}</option>`;});}
-    onFilterChange();
+  const app=document.getElementById('fA').value;
+  const ew=document.getElementById('fEW'),es=document.getElementById('fE');
+  if(!app){ew.style.display='none';es.innerHTML='<option value="">📋 Tous</option>';render();return;}
+  ew.style.display='';
+  const exs=D.exercisesPerApp[app]||[];
+  es.innerHTML='<option value="">📋 Tous les exercices</option>';
+  exs.forEach(x=>{es.innerHTML+=`<option value="${x}">${x}</option>`;});
+  render();
+}
+
+// ============================================================
+// CLIENT-SIDE AGGREGATION
+// ============================================================
+function getFilteredRows(){
+  let rows=D.rows;
+  const cl=document.getElementById('fC').value;
+  if(cl)rows=rows.filter(r=>r.c===cl);
+  return rows;
+}
+
+function aggregateGlobal(rows){
+  const byE={};
+  rows.forEach(r=>{
+    if(!byE[r.e])byE[r.e]={email:r.e,classe:r.c,tP:0,tM:0,tS:0,apps:new Set(),niv:0};
+    byE[r.e].tP+=r.p;byE[r.e].tM+=r.m;byE[r.e].tS+=r.s;byE[r.e].apps.add(r.a);byE[r.e].niv++;
   });
+  return Object.values(byE).map(e=>({email:e.email,classe:e.classe,pts:e.tP,max:e.tM,pct:e.tM>0?Math.round(e.tP/e.tM*100):0,temps:Math.round(e.tS),apps:e.apps.size,niv:e.niv})).sort((a,b)=>b.pts!==a.pts?b.pts-a.pts:a.temps-b.temps);
 }
 
-function onFilterChange(){
-  const app=document.getElementById('filterApp').value;
-  if(!app){renderGlobalView();updateLegend();return;}
-  const classe=document.getElementById('filterClasse').value;
-  const key=app+'_'+classe;
-  const details=DATA.appDetails[key];
-  if(!details){onAppChange();return;}
-  const ex=document.getElementById('filterEx').value;
-  if(ex){renderExerciseView(details,ex);}else{renderAppView(details);}
-  updateLegend();
+function aggregateApp(rows,app){
+  const ar=rows.filter(r=>r.a===app);
+  const exs=D.exercisesPerApp[app]||[];
+  const byE={};
+  ar.forEach(r=>{
+    if(!byE[r.e])byE[r.e]={email:r.e,classe:r.c,tP:0,tM:0,tS:0,done:new Set()};
+    byE[r.e].tP+=r.p;byE[r.e].tM+=r.m;byE[r.e].tS+=r.s;byE[r.e].done.add(r.n);
+  });
+  return {totalEx:exs.length,students:Object.values(byE).map(e=>({email:e.email,classe:e.classe,pts:e.tP,max:e.tM,pct:e.tM>0?Math.round(e.tP/e.tM*100):0,temps:Math.round(e.tS),done:e.done.size})).sort((a,b)=>b.pts!==a.pts?b.pts-a.pts:a.temps-b.temps)};
 }
 
+function aggregateExercise(rows,app,ex){
+  const ar=rows.filter(r=>r.a===app&&r.n===ex);
+  const byE={};
+  ar.forEach(r=>{
+    if(!byE[r.e])byE[r.e]=[];
+    byE[r.e].push(r);
+  });
+  const out=[];
+  Object.entries(byE).forEach(([email,rs])=>{
+    rs.sort((a,b)=>b.p!==a.p?b.p-a.p:a.s-b.s);
+    const best=rs[0];
+    out.push({email,classe:best.c,pts:best.p,max:best.m,pct:best.m>0?Math.round(best.p/best.m*100):0,temps:best.s,tries:rs.length});
+  });
+  return out.sort((a,b)=>b.pts!==a.pts?b.pts-a.pts:a.temps-b.temps);
+}
+
+// ============================================================
+// STATS + LEGEND
+// ============================================================
 function updateStats(){
-  const students=new Set(DATA.globalLB.map(e=>e.email)).size;
-  const apps=DATA.appsList.length;
-  const levels=DATA.globalLB.reduce((s,e)=>s+(e.niveauxTotal||0),0);
-  const tP=DATA.globalLB.reduce((s,e)=>s+e.totalPoints,0);
-  const tM=DATA.globalLB.reduce((s,e)=>s+(e.totalPointsMax||0),0);
-  animateCounter('statStudents',students);animateCounter('statApps',apps);animateCounter('statLevels',levels);animateCounter('statAvgPct',tM>0?Math.round(tP/tM*100):0,'%');
-}
-
-function animateCounter(id,target,sfx){
-  const el=document.getElementById(id);sfx=sfx||'';const s=parseInt(el.textContent)||0,t0=performance.now();
-  function step(now){const p=Math.min((now-t0)/600,1);el.textContent=Math.round(s+(target-s)*(1-Math.pow(1-p,3)))+sfx;if(p<1)requestAnimationFrame(step);}
-  requestAnimationFrame(step);
-}
-
-function updateLegend(){
-  const banner=document.getElementById('legendBanner');
-  const classe=document.getElementById('filterClasse').value;
-  let list=[...DATA.globalLB];
-  if(classe)list=list.filter(e=>e.classe===classe);
-  if(list.length===0){banner.classList.add('legend-hidden');return;}
-  const best=list[0];
-  banner.classList.remove('legend-hidden');
-  document.getElementById('legendName').textContent=emailToName(best.email);
+  const rows=getFilteredRows();
+  const agg=aggregateGlobal(rows);
+  const students=agg.length,apps=new Set(rows.map(r=>r.a)).size,levels=rows.length;
+  const tP=agg.reduce((s,e)=>s+e.pts,0),tM=agg.reduce((s,e)=>s+e.max,0);
+  ac('s1',students);ac('s2',apps);ac('s3',levels);ac('s4',tM>0?Math.round(tP/tM*100):0,'%');
+  // Legend
+  const b=document.getElementById('legendBanner');
+  if(agg.length===0){b.classList.remove('show');return;}
+  b.classList.add('show');
+  const best=agg[0];
+  document.getElementById('legendName').textContent=eName(best.email);
   document.getElementById('legendClass').textContent=best.classe||'';
-  document.getElementById('legendPts').textContent=`${best.totalPoints}/${best.totalPointsMax||'?'}`;
-  const pct=best.totalPointsMax>0?Math.round(best.totalPoints/best.totalPointsMax*100):(best.pct||0);
-  document.getElementById('legendPct').textContent=pct+'%';
+  document.getElementById('legendPts').textContent=best.pts+'/'+best.max;
+  document.getElementById('legendPct').textContent=best.pct+'%';
 }
 
-function renderGlobalView(){
-  const classe=document.getElementById('filterClasse').value;
-  let list=[...DATA.globalLB];
-  if(classe)list=list.filter(e=>e.classe===classe);
-  if(list.length===0){document.getElementById('mainContent').innerHTML='<div class="empty-state"><div class="empty-icon">🏁</div><div class="empty-msg">Aucun résultat</div></div>';return;}
-  let html=`<div class="lb-list"><div class="lb-row lb-row-head lb-row-global"><div>Rang</div><div>Élève</div><div>Classe</div><div>Progression</div><div>%</div><div>Score</div><div>Temps</div></div>`;
-  list.forEach((e,i)=>{
-    const r=i+1,name=emailToName(e.email),ini=getInitials(e.email);
-    const pct=e.totalPointsMax>0?Math.round(e.totalPoints/e.totalPointsMax*100):(e.pct||0);
-    const pc=pct>=80?'var(--neon)':pct>=50?'var(--gold)':'var(--pink)';
-    const pp=Math.min(100,Math.round((e.niveauxTotal||0)/8*100));
-    const bc=pp>=100?'var(--neon)':pp>=50?'var(--cyan)':'var(--neon2)';
-    html+=`<div class="lb-row lb-row-global" onclick="openStudentDetail('${e.email}')">
-      <div class="lb-rank ${r<=3?'lb-rank-'+r:''} ${r<=4?'top4':''}">${r<=3?['🥇','🥈','🥉'][r-1]:'#'+r}</div>
-      <div class="lb-user"><div class="lb-user-avatar">${ini}</div><div><div class="lb-user-name">${name}</div><div class="lb-user-email">${e.email}</div></div></div>
-      <div class="lb-classe">${e.classe||'—'}</div>
-      <div class="progress-cell"><div class="progress-mini"><div class="progress-mini-fill" style="width:${pp}%;background:${bc}"></div></div><div class="progress-mini-text">${e.niveauxTotal||0} ex.</div></div>
-      <div class="lb-pct" style="color:${pc}">${pct}%</div>
-      <div class="lb-pts">${e.totalPoints}<small style="color:var(--text3);font-size:0.72rem">/${e.totalPointsMax||'?'}</small></div>
-      <div class="lb-time">${formatTime(e.totalTemps)}</div>
-    </div>`;
-  });
-  document.getElementById('mainContent').innerHTML=html+'</div>';
+function ac(id,target,sfx){
+  const el=document.getElementById(id);sfx=sfx||'';
+  const s=parseInt(el.textContent)||0,t0=performance.now();
+  (function step(now){const p=Math.min((now-t0)/500,1);el.textContent=Math.round(s+(target-s)*(1-Math.pow(1-p,3)))+sfx;if(p<1)requestAnimationFrame(step);})(performance.now());
 }
 
-function renderAppView(details){
-  if(!details||!details.students||details.students.length===0){document.getElementById('mainContent').innerHTML='<div class="empty-state"><div class="empty-icon">🏁</div><div class="empty-msg">Aucun résultat pour cette application</div></div>';return;}
-  const totalEx=details.exercises.length,students=details.students;
-  let html=`<div class="lb-list"><div class="lb-row lb-row-head lb-row-global"><div>Rang</div><div>Élève</div><div>Classe</div><div>Progression</div><div>%</div><div>Score</div><div>Temps</div></div>`;
-  students.forEach((st,i)=>{
-    const r=i+1,name=emailToName(st.email),ini=getInitials(st.email);
-    const pct=st.totalPointsMax>0?Math.round(st.totalPoints/st.totalPointsMax*100):(st.pct||0);
-    const pc=pct>=80?'var(--neon)':pct>=50?'var(--gold)':'var(--pink)';
-    const pp=totalEx>0?Math.round(st.exercisesDone/totalEx*100):0;
-    const bc=pp>=100?'var(--neon)':pp>=50?'var(--cyan)':'var(--neon2)';
-    html+=`<div class="lb-row lb-row-global" onclick="openStudentDetail('${st.email}')">
-      <div class="lb-rank ${r<=3?'lb-rank-'+r:''} ${r<=4?'top4':''}">${r<=3?['🥇','🥈','🥉'][r-1]:'#'+r}</div>
-      <div class="lb-user"><div class="lb-user-avatar">${ini}</div><div><div class="lb-user-name">${name}</div><div class="lb-user-email">${st.email}</div></div></div>
-      <div class="lb-classe">${st.classe||'—'}</div>
-      <div class="progress-cell"><div class="progress-mini"><div class="progress-mini-fill" style="width:${pp}%;background:${bc}"></div></div><div class="progress-mini-text">${st.exercisesDone}/${totalEx}</div></div>
-      <div class="lb-pct" style="color:${pc}">${pct}%</div>
-      <div class="lb-pts">${st.totalPoints}<small style="color:var(--text3);font-size:0.72rem">/${st.totalPointsMax||'?'}</small></div>
-      <div class="lb-time">${formatTime(st.totalTemps)}</div>
-    </div>`;
-  });
-  document.getElementById('mainContent').innerHTML=html+'</div>';
+// ============================================================
+// RENDER
+// ============================================================
+function render(){
+  const app=document.getElementById('fA').value;
+  const ex=document.getElementById('fE').value;
+  const rows=getFilteredRows();
+  updateStats();
+  if(!app){renderGlobal(rows);}
+  else if(!ex){renderApp(rows,app);}
+  else{renderEx(rows,app,ex);}
 }
 
-function renderExerciseView(details,exerciseName){
-  if(!details||!details.students){document.getElementById('mainContent').innerHTML='<div class="empty-state"><div class="empty-icon">🏁</div><div class="empty-msg">Aucun résultat</div></div>';return;}
-  const rows=[];
-  details.students.forEach(st=>{
-    const exData=st.details.filter(d=>d.niveau===exerciseName);
-    if(exData.length===0)return;
-    exData.sort((a,b)=>b.points!==a.points?b.points-a.points:a.temps-b.temps);
-    const best=exData[0];
-    rows.push({email:st.email,classe:st.classe,points:best.points,pointsMax:best.pointsMax,pct:best.pointsMax>0?Math.round(best.points/best.pointsMax*100):0,temps:best.temps,attempts:exData.length});
+function rankHTML(r){return r<=3?['🥇','🥈','🥉'][r-1]:'#'+r;}
+function rankCls(r){return (r<=3?'lb-rank-'+r:'')+(r<=4?' top4':'');}
+function pctC(p){return p>=80?'var(--neon)':p>=50?'var(--gold)':'var(--pink)';}
+function barC(p){return p>=100?'var(--neon)':p>=50?'var(--cyan)':'var(--neon2)';}
+
+function renderGlobal(rows){
+  const list=aggregateGlobal(rows);
+  if(!list.length){document.getElementById('mc').innerHTML='<div class="empty-state"><div class="empty-icon">🏁</div><div class="empty-msg">Aucun résultat</div></div>';return;}
+  let h='<div class="lb-list"><div class="lb-row lb-row-head g-grid"><div>Rang</div><div>Élève</div><div>Classe</div><div>Progression</div><div>%</div><div>Score</div><div>Temps</div></div>';
+  list.forEach((e,i)=>{const r=i+1,pp=Math.min(100,Math.round(e.niv/8*100));
+    h+=`<div class="lb-row g-grid" onclick="openDetail('${e.email}')"><div class="lb-rank ${rankCls(r)}">${rankHTML(r)}</div><div class="lb-user"><div class="lb-user-avatar">${eIni(e.email)}</div><div><div class="lb-user-name">${eName(e.email)}</div><div class="lb-user-email">${e.email}</div></div></div><div class="lb-classe">${e.classe||'—'}</div><div class="progress-cell"><div class="progress-mini"><div class="progress-mini-fill" style="width:${pp}%;background:${barC(pp)}"></div></div><div class="progress-mini-text">${e.niv} ex.</div></div><div class="lb-pct" style="color:${pctC(e.pct)}">${e.pct}%</div><div class="lb-pts">${e.pts}<small style="color:var(--text3);font-size:.72rem">/${e.max}</small></div><div class="lb-time">${fmtT(e.temps)}</div></div>`;
   });
-  rows.sort((a,b)=>b.points!==a.points?b.points-a.points:a.temps-b.temps);
-  if(rows.length===0){document.getElementById('mainContent').innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-msg">Aucun élève n\'a encore réalisé cet exercice</div></div>';return;}
-  let html=`<div style="margin-bottom:12px;font-weight:600;color:var(--text2);font-size:0.9rem">📋 ${exerciseName} — <span style="color:var(--neon)">${rows.length} élève${rows.length>1?'s':''}</span></div>`;
-  html+=`<div class="lb-list"><div class="lb-row lb-row-head lb-row-exercise"><div>Rang</div><div>Élève</div><div>Classe</div><div>Score</div><div>%</div><div>Temps</div></div>`;
-  rows.forEach((r,i)=>{
-    const rk=i+1,name=emailToName(r.email),ini=getInitials(r.email);
-    const pc=r.pct>=80?'var(--neon)':r.pct>=50?'var(--gold)':'var(--pink)';
-    html+=`<div class="lb-row lb-row-exercise" onclick="openStudentDetail('${r.email}')">
-      <div class="lb-rank ${rk<=3?'lb-rank-'+rk:''} ${rk<=4?'top4':''}">${rk<=3?['🥇','🥈','🥉'][rk-1]:'#'+rk}</div>
-      <div class="lb-user"><div class="lb-user-avatar">${ini}</div><div><div class="lb-user-name">${name}</div><div class="lb-user-email">${r.email}</div></div></div>
-      <div class="lb-classe">${r.classe||'—'}</div>
-      <div class="lb-pts">${r.points}<small style="color:var(--text3);font-size:0.72rem">/${r.pointsMax||'?'}</small></div>
-      <div class="lb-pct" style="color:${pc}">${r.pct}%</div>
-      <div class="lb-time">${formatTime(r.temps)}</div>
-    </div>`;
-  });
-  document.getElementById('mainContent').innerHTML=html+'</div>';
+  document.getElementById('mc').innerHTML=h+'</div>';
 }
 
-function openStudentDetail(email){
-  const overlay=document.getElementById('detailOverlay');overlay.style.display='flex';
-  overlay.innerHTML=`<div class="detail-box"><div class="loading-state"><div class="loader-ring"></div><div class="loading-text">Chargement…</div></div></div>`;
-  jsonpFetch('student',{email},data=>{
-    if(!data||data.status!=='ok'){overlay.innerHTML=`<div class="detail-box"><button class="detail-close" onclick="closeDetail()">✕</button><div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-msg">Erreur</div></div></div>`;return;}
-    const name=emailToName(email),ini=getInitials(email),apps=data.apps||[],classe=data.classe||'';
-    const tP=data.totalPoints||0,tM=data.totalPointsMax||0,tPct=tM>0?Math.round(tP/tM*100):0;
-    const tL=apps.reduce((s,a)=>s+a.niveaux.length,0);
-    const gR=DATA.globalLB.findIndex(e=>e.email===email)+1;
-    const pc=tPct>=80?'var(--neon)':tPct>=50?'var(--gold)':'var(--pink)';
-    let appsHTML=apps.map(app=>{
-      const aM=app.totalPointsMax||0,aPct=aM>0?Math.round(app.totalPoints/aM*100):0;
-      const ac=aPct>=80?'var(--neon)':aPct>=50?'var(--gold)':'var(--pink)';
-      return `<div class="detail-app" onclick="this.classList.toggle('open')"><div class="detail-app-header"><div class="detail-app-name">📱 ${app.app} <span class="detail-app-badge">${app.totalPoints}/${aM}</span> <span style="color:${ac};font-weight:700;font-size:0.85rem;margin-left:6px">${aPct}%</span></div><div class="detail-app-arrow">▼</div></div><div class="detail-app-body"><div class="detail-level-row" style="font-weight:600;color:var(--text3);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px"><div>Exercice</div><div>Score</div><div>%</div><div>Temps</div><div>Date</div></div>${app.niveaux.map(n=>{const nP=n.pointsMax>0?Math.round(n.points/n.pointsMax*100):0;const nc=nP>=80?'var(--neon)':nP>=50?'var(--gold)':'var(--pink)';return `<div class="detail-level-row"><div class="detail-level-name">${n.niveau}</div><div class="detail-level-pts">${n.points}/${n.pointsMax||'?'}</div><div style="color:${nc};font-weight:600;font-family:'JetBrains Mono',monospace;font-size:0.85rem">${nP}%</div><div class="detail-level-time">${formatTime(n.temps)}</div><div class="detail-level-date">${formatDate(n.date)}</div></div>`;}).join('')}</div></div>`;
-    }).join('');
-    overlay.innerHTML=`<div class="detail-box"><button class="detail-close" onclick="closeDetail()">✕</button><div class="detail-header"><div class="detail-avatar">${ini}</div><div class="detail-info"><h2>${name}</h2><div class="email">${email}${classe?' — <span style="color:var(--neon2)">'+classe+'</span>':''}</div></div></div><div class="detail-stats"><div class="ds-item"><div class="ds-val">${gR>0?'#'+gR:'—'}</div><div class="ds-label">Rang global</div></div><div class="ds-item"><div class="ds-val">${tP}<small style="font-size:0.7rem;color:var(--text3)">/${tM}</small></div><div class="ds-label">Score</div></div><div class="ds-item"><div class="ds-val" style="color:${pc}">${tPct}%</div><div class="ds-label">Réussite</div></div><div class="ds-item"><div class="ds-val">${tL}</div><div class="ds-label">Niveaux</div></div></div><div style="margin-bottom:12px;font-weight:600;font-size:0.85rem;color:var(--text2);display:flex;align-items:center;gap:8px">📱 Résultats par application <span style="font-size:0.72rem;color:var(--text3);font-weight:400">(cliquer pour déplier)</span></div>${appsHTML||'<div class="empty-state"><div class="empty-msg">Aucun résultat</div></div>'}</div>`;
+function renderApp(rows,app){
+  const {totalEx,students}=aggregateApp(rows,app);
+  if(!students.length){document.getElementById('mc').innerHTML='<div class="empty-state"><div class="empty-icon">🏁</div><div class="empty-msg">Aucun résultat pour cette application</div></div>';return;}
+  let h='<div class="lb-list"><div class="lb-row lb-row-head g-grid"><div>Rang</div><div>Élève</div><div>Classe</div><div>Progression</div><div>%</div><div>Score</div><div>Temps</div></div>';
+  students.forEach((e,i)=>{const r=i+1,pp=totalEx>0?Math.round(e.done/totalEx*100):0;
+    h+=`<div class="lb-row g-grid" onclick="openDetail('${e.email}')"><div class="lb-rank ${rankCls(r)}">${rankHTML(r)}</div><div class="lb-user"><div class="lb-user-avatar">${eIni(e.email)}</div><div><div class="lb-user-name">${eName(e.email)}</div><div class="lb-user-email">${e.email}</div></div></div><div class="lb-classe">${e.classe||'—'}</div><div class="progress-cell"><div class="progress-mini"><div class="progress-mini-fill" style="width:${pp}%;background:${barC(pp)}"></div></div><div class="progress-mini-text">${e.done}/${totalEx}</div></div><div class="lb-pct" style="color:${pctC(e.pct)}">${e.pct}%</div><div class="lb-pts">${e.pts}<small style="color:var(--text3);font-size:.72rem">/${e.max}</small></div><div class="lb-time">${fmtT(e.temps)}</div></div>`;
   });
+  document.getElementById('mc').innerHTML=h+'</div>';
+}
+
+function renderEx(rows,app,ex){
+  const list=aggregateExercise(rows,app,ex);
+  if(!list.length){document.getElementById('mc').innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-msg">Aucun élève n\'a réalisé cet exercice</div></div>';return;}
+  let h=`<div style="margin-bottom:12px;font-weight:600;color:var(--text2);font-size:.9rem">📋 ${ex} — <span style="color:var(--neon)">${list.length} élève${list.length>1?'s':''}</span></div><div class="lb-list"><div class="lb-row lb-row-head e-grid"><div>Rang</div><div>Élève</div><div>Classe</div><div>Score</div><div>%</div><div>Temps</div></div>`;
+  list.forEach((e,i)=>{const r=i+1;
+    h+=`<div class="lb-row e-grid" onclick="openDetail('${e.email}')"><div class="lb-rank ${rankCls(r)}">${rankHTML(r)}</div><div class="lb-user"><div class="lb-user-avatar">${eIni(e.email)}</div><div><div class="lb-user-name">${eName(e.email)}</div><div class="lb-user-email">${e.email}</div></div></div><div class="lb-classe">${e.classe||'—'}</div><div class="lb-pts">${e.pts}<small style="color:var(--text3);font-size:.72rem">/${e.max}</small></div><div class="lb-pct" style="color:${pctC(e.pct)}">${e.pct}%</div><div class="lb-time">${fmtT(e.temps)}</div></div>`;
+  });
+  document.getElementById('mc').innerHTML=h+'</div>';
+}
+
+// ============================================================
+// STUDENT DETAIL (uses client-side data, no extra call)
+// ============================================================
+function openDetail(email){
+  const ov=document.getElementById('detailOverlay');ov.style.display='flex';
+  const rows=D.rows.filter(r=>r.e===email);
+  if(!rows.length){ov.innerHTML=`<div class="detail-box"><button class="detail-close" onclick="closeDetail()">✕</button><div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-msg">Aucun résultat</div></div></div>`;return;}
+  const classe=rows[0].c,name=eName(email),ini=eIni(email);
+  let tP=0,tM=0,tS=0;const byApp={};
+  rows.forEach(r=>{tP+=r.p;tM+=r.m;tS+=r.s;if(!byApp[r.a])byApp[r.a]={app:r.a,pts:0,max:0,nivs:[]};byApp[r.a].pts+=r.p;byApp[r.a].max+=r.m;byApp[r.a].nivs.push(r);});
+  const tPct=tM>0?Math.round(tP/tM*100):0;
+  const gList=aggregateGlobal(D.rows);const gR=gList.findIndex(e=>e.email===email)+1;
+  const pc=pctC(tPct);
+  let appsH=Object.values(byApp).map(app=>{
+    const aPct=app.max>0?Math.round(app.pts/app.max*100):0;const ac=pctC(aPct);
+    return `<div class="detail-app" onclick="this.classList.toggle('open')"><div class="detail-app-header"><div class="detail-app-name">📱 ${app.app} <span class="detail-app-badge">${app.pts}/${app.max}</span> <span style="color:${ac};font-weight:700;font-size:.85rem;margin-left:6px">${aPct}%</span></div><div class="detail-app-arrow">▼</div></div><div class="detail-app-body"><div class="dlr" style="font-weight:600;color:var(--text3);font-size:.75rem;text-transform:uppercase;letter-spacing:1px"><div>Exercice</div><div>Score</div><div>%</div><div>Temps</div><div>Date</div></div>${app.nivs.map(n=>{const nP=n.m>0?Math.round(n.p/n.m*100):0;return `<div class="dlr"><div style="color:var(--text2)">${n.n}</div><div style="font-family:'JetBrains Mono',monospace;color:var(--neon);font-weight:600">${n.p}/${n.m||'?'}</div><div style="color:${pctC(nP)};font-weight:600;font-family:'JetBrains Mono',monospace;font-size:.85rem">${nP}%</div><div style="font-family:'JetBrains Mono',monospace;color:var(--text3)">${fmtT(n.s)}</div><div style="font-family:'JetBrains Mono',monospace;color:var(--text3);font-size:.75rem">${fmtD(n.t)}</div></div>`;}).join('')}</div></div>`;
+  }).join('');
+  ov.innerHTML=`<div class="detail-box"><button class="detail-close" onclick="closeDetail()">✕</button><div class="detail-header"><div class="detail-avatar">${ini}</div><div class="detail-info"><h2>${name}</h2><div class="email">${email}${classe?' — <span style="color:var(--neon2)">'+classe+'</span>':''}</div></div></div><div class="detail-stats"><div class="ds-item"><div class="ds-val">${gR>0?'#'+gR:'—'}</div><div class="ds-label">Rang global</div></div><div class="ds-item"><div class="ds-val">${tP}<small style="font-size:.7rem;color:var(--text3)">/${tM}</small></div><div class="ds-label">Score</div></div><div class="ds-item"><div class="ds-val" style="color:${pc}">${tPct}%</div><div class="ds-label">Réussite</div></div><div class="ds-item"><div class="ds-val">${rows.length}</div><div class="ds-label">Niveaux</div></div></div><div style="margin-bottom:12px;font-weight:600;font-size:.85rem;color:var(--text2)">📱 Résultats par application <span style="font-size:.72rem;color:var(--text3);font-weight:400">(cliquer pour déplier)</span></div>${appsH}</div>`;
 }
 function closeDetail(){document.getElementById('detailOverlay').style.display='none';}
 
-function emailToName(e){return e.split('@')[0].split(/[._-]/).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');}
-function getInitials(e){const p=e.split('@')[0].split(/[._-]/);return p.length>=2?(p[0][0]+p[1][0]).toUpperCase():p[0].substring(0,2).toUpperCase();}
-function formatTime(s){if(!s||s<=0)return'0s';s=Math.round(s);if(s<60)return s+'s';const m=Math.floor(s/60),r=s%60;if(m<60)return m+'m'+(r>0?String(r).padStart(2,'0')+'s':'');return Math.floor(m/60)+'h'+(m%60>0?String(m%60).padStart(2,'0')+'m':'');}
-function formatDate(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('fr-BE',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return'—';}}
+function eName(e){return e.split('@')[0].split(/[._-]/).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');}
+function eIni(e){const p=e.split('@')[0].split(/[._-]/);return p.length>=2?(p[0][0]+p[1][0]).toUpperCase():p[0].substring(0,2).toUpperCase();}
+function fmtT(s){if(!s||s<=0)return'0s';s=Math.round(s);if(s<60)return s+'s';const m=Math.floor(s/60),r=s%60;if(m<60)return m+'m'+(r>0?String(r).padStart(2,'0')+'s':'');return Math.floor(m/60)+'h'+(m%60>0?String(m%60).padStart(2,'0')+'m':'');}
+function fmtD(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('fr-BE',{day:'2-digit',month:'short'});}catch(e){return'—';}}
 </script>
 </body>
 </html>
