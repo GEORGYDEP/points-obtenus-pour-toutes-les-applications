@@ -511,7 +511,7 @@ function setMode(m){
   viewMode=m;
   document.getElementById('modeLast').classList.toggle('active',m==='last');
   document.getElementById('modeAll').classList.toggle('active',m==='all');
-  document.getElementById('boardInfo').textContent=(m==='last'?'Dernière partie':'Toutes les parties')+' — Trié par points';
+  document.getElementById('boardInfo').textContent=(m==='last'?'Dernière partie — Trié par points':'Toutes les parties — Trié par % de réussite');
   render();
 }
 
@@ -704,6 +704,13 @@ function renderProgressRing(pct){
 // ============================================================
 // AGGREGATION
 // ============================================================
+// Tri adapté au mode : "last" → par points, "all" → par pourcentage
+function rankSort(a,b){
+  if(viewMode==='all'){
+    return a.pct!==b.pct?b.pct-a.pct:a.temps-b.temps;
+  }
+  return b.pts!==a.pts?b.pts-a.pts:a.temps-b.temps;
+}
 function aggregateGlobal(rows){
   const mRows=applyMode(rows);
   const byE={};
@@ -721,7 +728,7 @@ function aggregateGlobal(rows){
     Object.keys(e.appNivs).forEach(app=>{totalDone+=e.appNivs[app].size;});
     const progressPct=totalPossible>0?Math.min(100,Math.round(totalDone/totalPossible*100)):0;
     return {email:e.email,classe:e.classe,pts:e.tP,max:e.tM,pct:e.tM>0?Math.round(e.tP/e.tM*100):0,temps:Math.round(e.tS),apps:e.apps.size,niv:totalDone,totalPossible,progressPct};
-  }).sort((a,b)=>b.pts!==a.pts?b.pts-a.pts:a.temps-b.temps);
+  }).sort(rankSort);
 }
 
 function aggregateApp(rows,app){
@@ -732,7 +739,7 @@ function aggregateApp(rows,app){
     if(!byE[r.e])byE[r.e]={email:r.e,classe:r.c,tP:0,tM:0,tS:0,done:new Set()};
     byE[r.e].tP+=r.p;byE[r.e].tM+=r.m;byE[r.e].tS+=r.s;byE[r.e].done.add(r.n);
   });
-  return {totalEx,students:Object.values(byE).map(e=>({email:e.email,classe:e.classe,pts:e.tP,max:e.tM,pct:e.tM>0?Math.round(e.tP/e.tM*100):0,temps:Math.round(e.tS),done:e.done.size,progressPct:totalEx>0?Math.min(100,Math.round(e.done.size/totalEx*100)):0})).sort((a,b)=>b.pts!==a.pts?b.pts-a.pts:a.temps-b.temps)};
+  return {totalEx,students:Object.values(byE).map(e=>({email:e.email,classe:e.classe,pts:e.tP,max:e.tM,pct:e.tM>0?Math.round(e.tP/e.tM*100):0,temps:Math.round(e.tS),done:e.done.size,progressPct:totalEx>0?Math.min(100,Math.round(e.done.size/totalEx*100)):0})).sort(rankSort)};
 }
 
 function aggregateExercise(rows,app,ex){
@@ -745,7 +752,7 @@ function aggregateExercise(rows,app,ex){
     const best=rs[0];
     out.push({email,classe:best.c,pts:best.p,max:best.m,pct:best.m>0?Math.round(best.p/best.m*100):0,temps:best.s,tries:rs.length});
   });
-  return out.sort((a,b)=>b.pts!==a.pts?b.pts-a.pts:a.temps-b.temps);
+  return out.sort(rankSort);
 }
 
 // ============================================================
