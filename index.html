@@ -490,7 +490,7 @@ const REFRESH=15;
 let D={rows:[],apps:[],classes:[],exercisesPerApp:{},totalLevelsPerApp:{}};
 let countdown=REFRESH,timer=null,firstLoad=true;
 let viewMode='last';
-let selectedClasses=[]; // multi-select classes
+let selectedClasses=[];
 
 document.addEventListener('DOMContentLoaded',()=>{
   updateClock();setInterval(updateClock,1000);
@@ -515,9 +515,6 @@ function setMode(m){
   render();
 }
 
-// ============================================================
-// JSONP
-// ============================================================
 function jsonp(action,params,cb){
   const n='cb_'+Math.random().toString(36).substr(2,8)+'_'+Date.now();
   window[n]=function(d){delete window[n];const s=document.getElementById(n);if(s)s.remove();cb(d);};
@@ -534,7 +531,8 @@ function fetchData(){
     if(!d||d.status!=='ok')return;
     D.rows=d.rows||[];D.apps=d.apps||[];D.classes=d.classes||[];
     D.exercisesPerApp=d.exercisesPerApp||{};D.totalLevelsPerApp=d.totalLevelsPerApp||{};
-    if(firstLoad){populateFilters();firstLoad=false;}
+    if(firstLoad){firstLoad=false;}
+    populateFilters();
     render();
   });
 }
@@ -546,64 +544,33 @@ function populateFilters(){
   D.apps.forEach(x=>{a.innerHTML+=`<option value="${x}">📱 ${x}</option>`;});a.value=av;
 }
 
-// ============================================================
-// MULTI-SELECT CLASSES — Event Delegation (zéro inline onclick)
-// ============================================================
 (function(){
-  // Ouvrir/fermer le dropdown
   document.addEventListener('click', function(e){
     const ms = document.getElementById('classMultiSelect');
     if(!ms) return;
     const btn = document.getElementById('classToggleBtn');
     const dd = document.getElementById('classDropdown');
-
-    // Clic sur le bouton toggle
-    if(btn && btn.contains(e.target)){
-      ms.classList.toggle('open');
-      return;
-    }
-
-    // Clic sur un item du dropdown
+    if(btn && btn.contains(e.target)){ms.classList.toggle('open');return;}
     const item = e.target.closest('.multi-select-item');
     if(item && dd && dd.contains(item)){
       const cls = item.getAttribute('data-class');
-      if(cls === '__all__'){
-        selectedClasses = [];
-      } else if(cls){
-        const idx = selectedClasses.indexOf(cls);
-        if(idx >= 0) selectedClasses.splice(idx, 1);
-        else selectedClasses.push(cls);
-      }
-      refreshClassItems();
-      updateClassLabel();
-      render();
-      return;
+      if(cls === '__all__'){selectedClasses = [];}
+      else if(cls){const idx = selectedClasses.indexOf(cls);if(idx >= 0) selectedClasses.splice(idx, 1);else selectedClasses.push(cls);}
+      refreshClassItems();updateClassLabel();render();return;
     }
-
-    // Clic en dehors → fermer
-    if(!ms.contains(e.target)){
-      ms.classList.remove('open');
-    }
+    if(!ms.contains(e.target)){ms.classList.remove('open');}
   });
 })();
 
 function buildClassDropdown(){
   const dd = document.getElementById('classDropdown');
-  if(!dd) return;
-  dd.innerHTML = '';
-
-  // Option "Toutes les classes"
+  if(!dd) return;dd.innerHTML = '';
   const allDiv = document.createElement('div');
   allDiv.className = 'multi-select-item multi-select-all' + (selectedClasses.length === 0 ? ' selected' : '');
   allDiv.setAttribute('data-class', '__all__');
   allDiv.innerHTML = '<div class="multi-select-check">' + (selectedClasses.length === 0 ? '✓' : '') + '</div><span>Toutes les classes</span>';
   dd.appendChild(allDiv);
-
-  const sep = document.createElement('div');
-  sep.className = 'multi-select-divider';
-  dd.appendChild(sep);
-
-  // Items de classes
+  const sep = document.createElement('div');sep.className = 'multi-select-divider';dd.appendChild(sep);
   D.classes.forEach(function(c){
     const sel = selectedClasses.includes(c);
     const div = document.createElement('div');
@@ -612,38 +579,23 @@ function buildClassDropdown(){
     div.innerHTML = '<div class="multi-select-check">' + (sel ? '✓' : '') + '</div><span>' + c + '</span>';
     dd.appendChild(div);
   });
-
   updateClassLabel();
 }
 
 function refreshClassItems(){
-  const dd = document.getElementById('classDropdown');
-  if(!dd) return;
-  const items = dd.querySelectorAll('.multi-select-item');
-  items.forEach(function(item){
+  const dd = document.getElementById('classDropdown');if(!dd) return;
+  dd.querySelectorAll('.multi-select-item').forEach(function(item){
     const cls = item.getAttribute('data-class');
-    if(cls === '__all__'){
-      const isAll = selectedClasses.length === 0;
-      item.classList.toggle('selected', isAll);
-      item.querySelector('.multi-select-check').textContent = isAll ? '✓' : '';
-    } else {
-      const sel = selectedClasses.includes(cls);
-      item.classList.toggle('selected', sel);
-      item.querySelector('.multi-select-check').textContent = sel ? '✓' : '';
-    }
+    if(cls === '__all__'){const isAll = selectedClasses.length === 0;item.classList.toggle('selected', isAll);item.querySelector('.multi-select-check').textContent = isAll ? '✓' : '';}
+    else{const sel = selectedClasses.includes(cls);item.classList.toggle('selected', sel);item.querySelector('.multi-select-check').textContent = sel ? '✓' : '';}
   });
 }
 
 function updateClassLabel(){
-  const label = document.getElementById('classSelectLabel');
-  if(!label) return;
-  if(selectedClasses.length === 0){
-    label.textContent = '🎓 Toutes les classes';
-  } else if(selectedClasses.length === 1){
-    label.textContent = '🎓 ' + selectedClasses[0];
-  } else {
-    label.innerHTML = '🎓 ' + selectedClasses.length + ' classes <span class="multi-select-count">' + selectedClasses.length + '</span>';
-  }
+  const label = document.getElementById('classSelectLabel');if(!label) return;
+  if(selectedClasses.length === 0){label.textContent = '🎓 Toutes les classes';}
+  else if(selectedClasses.length === 1){label.textContent = '🎓 ' + selectedClasses[0];}
+  else{label.innerHTML = '🎓 ' + selectedClasses.length + ' classes <span class="multi-select-count">' + selectedClasses.length + '</span>';}
 }
 
 function onAppChange(){
@@ -657,33 +609,19 @@ function onAppChange(){
   render();
 }
 
-// ============================================================
-// HELPERS
-// ============================================================
 function getFilteredRows(){
   let rows=D.rows;
   if(selectedClasses.length>0) rows=rows.filter(r=>selectedClasses.includes(r.c));
   return rows;
 }
 
-// Filtrer par dernière session (par email + app)
 function filterLastSession(rows){
   const lastSid={};
-  rows.forEach(r=>{
-    const key=r.e+'|||'+r.a;
-    const sid=r.sid||r.t; // fallback sur timestamp si pas de sessionId
-    if(!lastSid[key]||sid>lastSid[key]) lastSid[key]=sid;
-  });
-  return rows.filter(r=>{
-    const key=r.e+'|||'+r.a;
-    const sid=r.sid||r.t;
-    return sid===lastSid[key];
-  });
+  rows.forEach(r=>{const key=r.e+'|||'+r.a;const sid=r.sid||r.t;if(!lastSid[key]||sid>lastSid[key]) lastSid[key]=sid;});
+  return rows.filter(r=>{const key=r.e+'|||'+r.a;const sid=r.sid||r.t;return sid===lastSid[key];});
 }
 
-function applyMode(rows){
-  return viewMode==='last'?filterLastSession(rows):rows;
-}
+function applyMode(rows){return viewMode==='last'?filterLastSession(rows):rows;}
 
 function eName(e){return e.split('@')[0].split(/[._-]/).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');}
 function eIni(e){const p=e.split('@')[0].split(/[._-]/);return p.length>=2?(p[0][0]+p[1][0]).toUpperCase():p[0].substring(0,2).toUpperCase();}
@@ -701,17 +639,27 @@ function renderProgressRing(pct){
   return `<div class="progress-ring"><svg width="36" height="36" viewBox="0 0 36 36"><circle class="progress-ring-bg" cx="18" cy="18" r="${r}" fill="none" stroke-width="3"/><circle class="progress-ring-fill" cx="18" cy="18" r="${r}" fill="none" stroke="${c}" stroke-width="3" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/></svg><span class="progress-ring-text" style="color:${c};">${pct}%</span></div>`;
 }
 
-// ============================================================
-// AGGREGATION
-// ============================================================
-// Tri adapté au mode : "last" → par points, "all" → par pourcentage
 function rankSort(a,b){
-  if(viewMode==='all'){
-    return a.pct!==b.pct?b.pct-a.pct:a.temps-b.temps;
-  }
+  if(viewMode==='all'){return a.pct!==b.pct?b.pct-a.pct:a.temps-b.temps;}
   return b.pts!==a.pts?b.pts-a.pts:a.temps-b.temps;
 }
+
 function aggregateGlobal(rows){
+  const mRows=applyMode(rows);
+  const byEA={};
+  mRows.forEach(r=>{
+    const key=r.e+'|||'+r.a;
+    if(!byEA[key])byEA[key]={email:r.e,classe:r.c,app:r.a,tP:0,tM:0,tS:0,nivs:new Set()};
+    byEA[key].tP+=r.p;byEA[key].tM+=r.m;byEA[key].tS+=r.s;byEA[key].nivs.add(r.n);
+  });
+  return Object.values(byEA).map(e=>{
+    const totalLvl=getTotalLevels(e.app);const done=e.nivs.size;
+    const progressPct=totalLvl>0?Math.min(100,Math.round(done/totalLvl*100)):0;
+    return {email:e.email,classe:e.classe,app:e.app,pts:e.tP,max:e.tM,pct:e.tM>0?Math.round(e.tP/e.tM*100):0,temps:Math.round(e.tS),niv:done,totalPossible:totalLvl,progressPct};
+  }).sort(rankSort);
+}
+
+function aggregateGlobalStats(rows){
   const mRows=applyMode(rows);
   const byE={};
   mRows.forEach(r=>{
@@ -721,56 +669,36 @@ function aggregateGlobal(rows){
     if(!byE[r.e].appNivs[r.a])byE[r.e].appNivs[r.a]=new Set();
     byE[r.e].appNivs[r.a].add(r.n);
   });
-  let totalPossible=0;
-  D.apps.forEach(app=>{totalPossible+=getTotalLevels(app);});
+  let totalPossible=0;D.apps.forEach(app=>{totalPossible+=getTotalLevels(app);});
   return Object.values(byE).map(e=>{
-    let totalDone=0;
-    Object.keys(e.appNivs).forEach(app=>{totalDone+=e.appNivs[app].size;});
+    let totalDone=0;Object.keys(e.appNivs).forEach(app=>{totalDone+=e.appNivs[app].size;});
     const progressPct=totalPossible>0?Math.min(100,Math.round(totalDone/totalPossible*100)):0;
     return {email:e.email,classe:e.classe,pts:e.tP,max:e.tM,pct:e.tM>0?Math.round(e.tP/e.tM*100):0,temps:Math.round(e.tS),apps:e.apps.size,niv:totalDone,totalPossible,progressPct};
   }).sort(rankSort);
 }
 
 function aggregateApp(rows,app){
-  const ar=applyMode(rows.filter(r=>r.a===app));
-  const totalEx=getTotalLevels(app);
-  const byE={};
-  ar.forEach(r=>{
-    if(!byE[r.e])byE[r.e]={email:r.e,classe:r.c,tP:0,tM:0,tS:0,done:new Set()};
-    byE[r.e].tP+=r.p;byE[r.e].tM+=r.m;byE[r.e].tS+=r.s;byE[r.e].done.add(r.n);
-  });
+  const ar=applyMode(rows.filter(r=>r.a===app));const totalEx=getTotalLevels(app);const byE={};
+  ar.forEach(r=>{if(!byE[r.e])byE[r.e]={email:r.e,classe:r.c,tP:0,tM:0,tS:0,done:new Set()};byE[r.e].tP+=r.p;byE[r.e].tM+=r.m;byE[r.e].tS+=r.s;byE[r.e].done.add(r.n);});
   return {totalEx,students:Object.values(byE).map(e=>({email:e.email,classe:e.classe,pts:e.tP,max:e.tM,pct:e.tM>0?Math.round(e.tP/e.tM*100):0,temps:Math.round(e.tS),done:e.done.size,progressPct:totalEx>0?Math.min(100,Math.round(e.done.size/totalEx*100)):0})).sort(rankSort)};
 }
 
 function aggregateExercise(rows,app,ex){
-  const ar=applyMode(rows.filter(r=>r.a===app&&r.n===ex));
-  const byE={};
-  ar.forEach(r=>{if(!byE[r.e])byE[r.e]=[];byE[r.e].push(r);});
-  const out=[];
-  Object.entries(byE).forEach(([email,rs])=>{
-    rs.sort((a,b)=>b.p!==a.p?b.p-a.p:a.s-b.s);
-    const best=rs[0];
-    out.push({email,classe:best.c,pts:best.p,max:best.m,pct:best.m>0?Math.round(best.p/best.m*100):0,temps:best.s,tries:rs.length});
-  });
+  const ar=applyMode(rows.filter(r=>r.a===app&&r.n===ex));const byE={};
+  ar.forEach(r=>{if(!byE[r.e])byE[r.e]=[];byE[r.e].push(r);});const out=[];
+  Object.entries(byE).forEach(([email,rs])=>{rs.sort((a,b)=>b.p!==a.p?b.p-a.p:a.s-b.s);const best=rs[0];out.push({email,classe:best.c,pts:best.p,max:best.m,pct:best.m>0?Math.round(best.p/best.m*100):0,temps:best.s,tries:rs.length});});
   return out.sort(rankSort);
 }
 
-// ============================================================
-// STATS + LEGEND + PODIUM
-// ============================================================
 function updateStatsAndLegend(){
-  const rows=getFilteredRows();
-  const agg=aggregateGlobal(rows);
-  const students=agg.length;
-  const apps=new Set(applyMode(rows).map(r=>r.a)).size;
-  const mRows=applyMode(rows);
+  const rows=getFilteredRows();const agg=aggregateGlobalStats(rows);const students=agg.length;
+  const apps=new Set(applyMode(rows).map(r=>r.a)).size;const mRows=applyMode(rows);
   const levels=new Set(mRows.map(r=>r.a+'|||'+r.n+'|||'+r.e)).size;
   const tP=agg.reduce((s,e)=>s+e.pts,0),tM=agg.reduce((s,e)=>s+e.max,0);
   animateVal('s1',students);animateVal('s2',apps);animateVal('s3',levels);animateVal('s4',tM>0?Math.round(tP/tM*100):0,'%');
   const b=document.getElementById('legendBanner');
   if(agg.length===0){b.classList.remove('show');return;}
-  b.classList.add('show');
-  const best=agg[0];
+  b.classList.add('show');const best=agg[0];
   document.getElementById('legendName').textContent=eName(best.email);
   document.getElementById('legendClass').textContent=best.classe||'';
   document.getElementById('legendPts').textContent=best.pts+'/'+best.max;
@@ -791,9 +719,6 @@ function renderPodium(list){
   section.innerHTML=top3.map((s,i)=>`<div class="podium-card ${classes[i]}" onclick="openDetail('${s.email}')"><div class="podium-medal">${medals[i]}</div><div class="podium-name">${eName(s.email)}</div><div class="podium-score">${s.pts} pts — ${s.pct}%</div><div class="podium-time">⏱ ${fmtT(s.temps)}</div><div class="podium-class">${s.classe||''}</div></div>`).join('');
 }
 
-// ============================================================
-// RENDER
-// ============================================================
 function render(){
   const app=document.getElementById('fA').value,ex=document.getElementById('fE').value,rows=getFilteredRows();
   updateStatsAndLegend();
@@ -808,19 +733,17 @@ function rankBadge(r){
 }
 
 function renderGlobal(rows){
-  const list=aggregateGlobal(rows);
-  renderPodium(list);
+  const list=aggregateGlobal(rows);const podiumList=aggregateGlobalStats(rows);renderPodium(podiumList);
   if(!list.length){document.getElementById('mc').innerHTML=`<div class="empty-state"><div class="empty-icon">🏁</div><div class="empty-title">En attente des élèves</div><div class="empty-text">Les résultats apparaîtront ici automatiquement.</div></div>`;return;}
-  let h='<div style="overflow-x:auto;"><table class="lb-table"><thead><tr><th style="width:50px;">#</th><th style="text-align:left;">Élève</th><th class="col-class">Classe</th><th>Progression</th><th>%</th><th>Score</th><th class="col-time">Temps</th></tr></thead><tbody>';
+  let h='<div style="overflow-x:auto;"><table class="lb-table"><thead><tr><th style="width:50px;">#</th><th style="text-align:left;">Élève</th><th class="col-class">Classe</th><th>Application</th><th>Progression</th><th>%</th><th>Score</th><th class="col-time">Temps</th></tr></thead><tbody>';
   list.forEach((e,i)=>{const r=i+1,rc=r<=3?`rank-${r}-row`:'';
-    h+=`<tr class="${rc}" style="animation-delay:${i*0.03}s" onclick="openDetail('${e.email}')"><td class="rank-cell">${rankBadge(r)}</td><td class="name-cell"><div class="name-main">${eName(e.email)}</div><div class="name-email">${e.email}</div></td><td class="col-class"><span class="class-badge">${e.classe||'—'}</span></td><td class="progress-cell"><div class="progress-bar-wrap"><div class="progress-bar-fill ${barClass(e.progressPct)}" style="width:${e.progressPct}%"></div></div><div class="progress-bar-text">${e.niv}/${e.totalPossible} niveaux (${e.progressPct}%)</div></td><td class="pct-cell pct-${pctClass(e.pct)}">${e.pct}%</td><td class="score-cell" style="color:var(--cyan-bright)">${e.pts}<span class="score-max">/${e.max}</span></td><td class="time-cell col-time">${fmtT(e.temps)}</td></tr>`;
+    h+=`<tr class="${rc}" style="animation-delay:${i*0.03}s" onclick="openDetail('${e.email}')"><td class="rank-cell">${rankBadge(r)}</td><td class="name-cell"><div class="name-main">${eName(e.email)}</div><div class="name-email">${e.email}</div></td><td class="col-class"><span class="class-badge">${e.classe||'—'}</span></td><td style="font-size:0.82rem;font-weight:600;color:var(--cyan-bright);">📱 ${e.app}</td><td class="progress-cell"><div class="progress-bar-wrap"><div class="progress-bar-fill ${barClass(e.progressPct)}" style="width:${e.progressPct}%"></div></div><div class="progress-bar-text">${e.niv}/${e.totalPossible} niveaux (${e.progressPct}%)</div></td><td class="pct-cell pct-${pctClass(e.pct)}">${e.pct}%</td><td class="score-cell" style="color:var(--cyan-bright)">${e.pts}<span class="score-max">/${e.max}</span></td><td class="time-cell col-time">${fmtT(e.temps)}</td></tr>`;
   });
   document.getElementById('mc').innerHTML=h+'</tbody></table></div>';
 }
 
 function renderApp(rows,app){
-  const{totalEx,students}=aggregateApp(rows,app);
-  renderPodium(students);
+  const{totalEx,students}=aggregateApp(rows,app);renderPodium(students);
   if(!students.length){document.getElementById('mc').innerHTML=`<div class="empty-state"><div class="empty-icon">📱</div><div class="empty-title">Aucun résultat</div><div class="empty-text">Aucun élève n'a encore utilisé cette application.</div></div>`;return;}
   let h='<div style="overflow-x:auto;"><table class="lb-table"><thead><tr><th style="width:50px;">#</th><th style="text-align:left;">Élève</th><th class="col-class">Classe</th><th>Progression</th><th>%</th><th>Score</th><th class="col-time">Temps</th></tr></thead><tbody>';
   students.forEach((e,i)=>{const r=i+1,rc=r<=3?`rank-${r}-row`:'';
@@ -830,8 +753,7 @@ function renderApp(rows,app){
 }
 
 function renderEx(rows,app,ex){
-  const list=aggregateExercise(rows,app,ex);
-  document.getElementById('podiumSection').classList.remove('show');
+  const list=aggregateExercise(rows,app,ex);document.getElementById('podiumSection').classList.remove('show');
   if(!list.length){document.getElementById('mc').innerHTML=`<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Aucun résultat</div><div class="empty-text">Aucun élève n'a réalisé cet exercice.</div></div>`;return;}
   let h=`<div style="padding:16px 20px;font-weight:700;color:var(--text-muted);font-size:.88rem;">📋 ${ex} — <span style="color:var(--cyan)">${list.length} élève${list.length>1?'s':''}</span></div>`;
   h+='<div style="overflow-x:auto;"><table class="lb-table"><thead><tr><th style="width:50px;">#</th><th style="text-align:left;">Élève</th><th class="col-class">Classe</th><th>Score</th><th>%</th><th class="col-time">Temps</th></tr></thead><tbody>';
@@ -841,64 +763,36 @@ function renderEx(rows,app,ex){
   document.getElementById('mc').innerHTML=h+'</tbody></table></div>';
 }
 
-// ============================================================
-// STUDENT DETAIL — avec sessions groupées
-// ============================================================
 function openDetail(email){
   const ov=document.getElementById('detailOverlay');ov.style.display='flex';
   const allRows=D.rows.filter(r=>r.e===email);
   if(!allRows.length){ov.innerHTML=`<div class="detail-box"><button class="detail-close" onclick="closeDetail()">✕</button><div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Aucun résultat</div></div></div>`;return;}
-
   const classe=allRows[0].c,name=eName(email),ini=eIni(email);
-
-  // Calculer stats sur les données filtrées par mode
-  const mRows=applyMode(allRows);
-  let tP=0,tM=0,tS=0;
+  const mRows=applyMode(allRows);let tP=0,tM=0,tS=0;
   mRows.forEach(r=>{tP+=r.p;tM+=r.m;tS+=r.s;});
   const tPct=tM>0?Math.round(tP/tM*100):0;
-  const gList=aggregateGlobal(D.rows);
-  const gR=gList.findIndex(e=>e.email===email)+1;
-
-  // Grouper par app puis par session
+  const gList=aggregateGlobalStats(D.rows);const gR=gList.findIndex(e=>e.email===email)+1;
   const byApp={};
   allRows.forEach(r=>{
     if(!byApp[r.a])byApp[r.a]={app:r.a,sessions:{}};
     const sid=r.sid||r.t;
     if(!byApp[r.a].sessions[sid])byApp[r.a].sessions[sid]={sid,rows:[],pts:0,max:0};
-    byApp[r.a].sessions[sid].rows.push(r);
-    byApp[r.a].sessions[sid].pts+=r.p;
-    byApp[r.a].sessions[sid].max+=r.m;
+    byApp[r.a].sessions[sid].rows.push(r);byApp[r.a].sessions[sid].pts+=r.p;byApp[r.a].sessions[sid].max+=r.m;
   });
-
   let appsH=Object.values(byApp).map(app=>{
     const sessions=Object.values(app.sessions).sort((a,b)=>b.sid.localeCompare(a.sid));
-    const latestSid=sessions[0].sid;
-    const totalLvl=getTotalLevels(app.app);
-
-    // Stats de la dernière session pour le header
-    const latest=sessions[0];
-    const latPct=latest.max>0?Math.round(latest.pts/latest.max*100):0;
+    const latestSid=sessions[0].sid;const totalLvl=getTotalLevels(app.app);
+    const latest=sessions[0];const latPct=latest.max>0?Math.round(latest.pts/latest.max*100):0;
     const latDone=new Set(latest.rows.map(r=>r.n)).size;
     const progPct=totalLvl>0?Math.min(100,Math.round(latDone/totalLvl*100)):0;
-
-    let sessionsH=sessions.map((sess,si)=>{
-      const isLatest=sess.sid===latestSid;
-      const sPct=sess.max>0?Math.round(sess.pts/sess.max*100):0;
-      const sDate=fmtD(sess.rows[0].t);
-
+    let sessionsH=sessions.map((sess)=>{
+      const isLatest=sess.sid===latestSid;const sPct=sess.max>0?Math.round(sess.pts/sess.max*100):0;const sDate=fmtD(sess.rows[0].t);
       let header=`<div class="session-header"><span class="session-badge ${isLatest?'session-latest':'session-old'}">${isLatest?'🎮 Partie en cours / dernière':'📦 Partie précédente'}</span><span style="font-size:0.72rem;color:var(--text-dim)">${sDate} — ${sess.pts}/${sess.max} (${sPct}%)</span></div>`;
-
-      let rowsH=sess.rows.map(n=>{
-        const nP=n.m>0?Math.round(n.p/n.m*100):0;
-        return `<div class="dlr"><div style="color:var(--text-light)">${n.n}</div><div style="font-family:'JetBrains Mono',monospace;color:var(--cyan);font-weight:600">${n.p}/${n.m||'?'}</div><div style="color:${pctColor(nP)};font-weight:700;font-family:'JetBrains Mono',monospace;font-size:.82rem">${nP}%</div><div style="font-family:'JetBrains Mono',monospace;color:var(--text-muted)">${fmtT(n.s)}</div><div style="font-family:'JetBrains Mono',monospace;color:var(--text-dim);font-size:.72rem">${fmtD(n.t)}</div></div>`;
-      }).join('');
-
+      let rowsH=sess.rows.map(n=>{const nP=n.m>0?Math.round(n.p/n.m*100):0;return `<div class="dlr"><div style="color:var(--text-light)">${n.n}</div><div style="font-family:'JetBrains Mono',monospace;color:var(--cyan);font-weight:600">${n.p}/${n.m||'?'}</div><div style="color:${pctColor(nP)};font-weight:700;font-family:'JetBrains Mono',monospace;font-size:.82rem">${nP}%</div><div style="font-family:'JetBrains Mono',monospace;color:var(--text-muted)">${fmtT(n.s)}</div><div style="font-family:'JetBrains Mono',monospace;color:var(--text-dim);font-size:.72rem">${fmtD(n.t)}</div></div>`;}).join('');
       return header+rowsH;
     }).join('');
-
     return `<div class="detail-app" onclick="this.classList.toggle('open')"><div class="detail-app-header"><div class="detail-app-name">📱 ${app.app} <span class="detail-app-badge">${latest.pts}/${latest.max}</span> <span style="color:${pctColor(latPct)};font-weight:700;font-size:.82rem;margin-left:4px">${latPct}%</span> <span style="font-size:.72rem;color:var(--text-dim);margin-left:8px">${latDone}/${totalLvl} niv.</span>${sessions.length>1?` <span style="font-size:.68rem;color:var(--bronze);margin-left:4px">(${sessions.length} parties)</span>`:''}</div><div style="display:flex;align-items:center;gap:10px;">${renderProgressRing(progPct)}<div class="detail-app-arrow">▼</div></div></div><div class="detail-app-body"><div class="dlr" style="font-weight:700;color:var(--text-dim);font-size:.7rem;text-transform:uppercase;letter-spacing:1px"><div>Exercice</div><div>Score</div><div>%</div><div>Temps</div><div>Date</div></div>${sessionsH}</div></div>`;
   }).join('');
-
   ov.innerHTML=`<div class="detail-box"><button class="detail-close" onclick="closeDetail()">✕</button><div class="detail-header"><div class="detail-avatar">${ini}</div><div class="detail-info"><h2>${name}</h2><div class="email">${email}${classe?' — <span style="color:var(--purple)">'+classe+'</span>':''}</div></div></div><div class="detail-stats"><div class="ds-item"><div class="ds-val">${gR>0?'#'+gR:'—'}</div><div class="ds-label">Rang global</div></div><div class="ds-item"><div class="ds-val">${tP}<small style="font-size:.65rem;color:var(--text-dim)">/${tM}</small></div><div class="ds-label">Score${viewMode==='last'?' (dernière)':' (total)'}</div></div><div class="ds-item"><div class="ds-val" style="color:${pctColor(tPct)}">${tPct}%</div><div class="ds-label">Réussite</div></div><div class="ds-item"><div class="ds-val">${mRows.length}</div><div class="ds-label">Niveaux</div></div></div><div style="margin-bottom:10px;font-weight:700;font-size:.82rem;color:var(--text-muted)">📱 Résultats par application <span style="font-size:.68rem;color:var(--text-dim);font-weight:400">(cliquer pour déplier — toutes les parties visibles)</span></div>${appsH}</div>`;
 }
 
